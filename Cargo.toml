@@ -1,6 +1,6 @@
 [package]
 name = "vulkano-framing"
-description = "Video wrappers for Vulkano."
+description = "Uploading images to and downloading frames from the GPU."
 license = "MIT"
 version = "0.1.0"
 authors = ["Ram <quadrupleslap@gmail.com>"]
@@ -17,14 +17,8 @@ rev = "c0d4afb"
 
 [dev-dependencies]
 png-framing = "0.2"
-winit = "0.7"
 
 [dev-dependencies.vulkano-shader-derive]
-version = "0.5"
-git = "https://github.com/tomaka/vulkano.git"
-rev = "c0d4afb"
-
-[dev-dependencies.vulkano-win]
 version = "0.5"
 git = "https://github.com/tomaka/vulkano.git"
 rev = "c0d4afb"
