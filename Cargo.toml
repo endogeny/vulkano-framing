@@ -9,16 +9,8 @@ documentation = "https://docs.rs/vulkano-framing"
 
 [dependencies]
 framing = "0.2"
-
-[dependencies.vulkano]
-version = "0.5"
-git = "https://github.com/tomaka/vulkano.git"
-rev = "c0d4afb"
+vulkano = "0.5"
 
 [dev-dependencies]
 png-framing = "0.2"
-
-[dev-dependencies.vulkano-shader-derive]
-version = "0.5"
-git = "https://github.com/tomaka/vulkano.git"
-rev = "c0d4afb"
+vulkano-shader-derive = "0.5"
