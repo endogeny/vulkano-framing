@@ -1,3 +1,5 @@
+//! Puts the image in a triangle and overlays a silly-looking gradient.
+
 #[macro_use] extern crate vulkano;
 #[macro_use] extern crate vulkano_shader_derive;
 extern crate vulkano_framing;
@@ -21,14 +23,17 @@ use vulkano_framing::Buffer;
 use std::sync::Arc;
 
 #[derive(Clone, Debug)]
-struct Vertex { pos: [f32; 3] }
-impl_vertex!(Vertex, pos);
+struct Vertex {
+    pos: [f32; 3],
+    tex: [f32; 2]
+}
+impl_vertex!(Vertex, pos, tex);
 
 fn main() {
     let image = Png::decode(include_bytes!("todoroki.png")).unwrap();
 
     let format = Format::R8G8B8A8Unorm;
-    let (w, h) = (1920, 1080);
+    let (w, h) = (1920, 1200);
     let instance_ext = InstanceExtensions::none();
     let device_ext = DeviceExtensions::none();
     let features = Features::none();
@@ -75,8 +80,8 @@ fn main() {
     let output = Buffer::new(output, w, h).unwrap();
 
     macro_rules! vertices {
-        ($($pos:expr),*) => {
-            [$( Vertex { pos: $pos } ),*]
+        ($($pos:expr, $tex:expr),*) => {
+            [$( Vertex { pos: $pos, tex: $tex } ),*]
         }
     }
 
@@ -85,49 +90,17 @@ fn main() {
         BufferUsage::all(),
         Some(queue.family()),
         vertices![
-            [-1.0, -1.0, -1.0],
-            [-1.0, -1.0,  1.0],
-            [-1.0,  1.0,  1.0],
-            [ 1.0,  1.0, -1.0],
-            [-1.0, -1.0, -1.0],
-            [-1.0,  1.0, -1.0],
-            [ 1.0, -1.0,  1.0],
-            [-1.0, -1.0, -1.0],
-            [ 1.0, -1.0, -1.0],
-            [ 1.0,  1.0, -1.0],
-            [ 1.0, -1.0, -1.0],
-            [-1.0, -1.0, -1.0],
-            [-1.0, -1.0, -1.0],
-            [-1.0,  1.0,  1.0],
-            [-1.0,  1.0, -1.0],
-            [ 1.0, -1.0,  1.0],
-            [-1.0, -1.0,  1.0],
-            [-1.0, -1.0, -1.0],
-            [-1.0,  1.0,  1.0],
-            [-1.0, -1.0,  1.0],
-            [ 1.0, -1.0,  1.0],
-            [ 1.0,  1.0,  1.0],
-            [ 1.0, -1.0, -1.0],
-            [ 1.0,  1.0, -1.0],
-            [ 1.0, -1.0, -1.0],
-            [ 1.0,  1.0,  1.0],
-            [ 1.0, -1.0,  1.0],
-            [ 1.0,  1.0,  1.0],
-            [ 1.0,  1.0, -1.0],
-            [-1.0,  1.0, -1.0],
-            [ 1.0,  1.0,  1.0],
-            [-1.0,  1.0, -1.0],
-            [-1.0,  1.0,  1.0],
-            [ 1.0,  1.0,  1.0],
-            [-1.0,  1.0,  1.0],
-            [ 1.0, -1.0,  1.0]
+            [-0.8,  0.8, 0.0], [0.0, 1.0],
+            [ 0.8,  0.8, 0.0], [1.0, 1.0],
+            [ 0.0, -0.8, 0.0], [0.5, 0.0]
         ].iter().cloned()
     ).unwrap();
 
     let vs = VertexShader::load(device.clone()).unwrap();
     let fs = FragmentShader::load(device.clone()).unwrap();
 
-    let render_pass = Arc::new(single_pass_renderpass!(device.clone(),
+    let render_pass = Arc::new(single_pass_renderpass!(
+        device.clone(),
         attachments: {
             color: {
                 load: DontCare,
@@ -256,11 +229,13 @@ shaders! {
         #version 450
 
         layout(location = 0) in vec3 pos;
+        layout(location = 1) in vec2 tex;
+
         layout(location = 0) out vec2 tex_coords;
 
         void main() {
             gl_Position = vec4(pos, 1.0);
-            tex_coords = pos.xy + vec2(0.5);
+            tex_coords = tex;
         }
     "
 
@@ -274,7 +249,7 @@ shaders! {
         layout(set = 0, binding = 0) uniform sampler2D tex;
 
         void main() {
-            color = texture(tex, tex_coords);
+            color = texture(tex, tex_coords) + vec4(tex_coords, 0.0, 1.0);
         }
     "
 }
