@@ -1,4 +1,4 @@
-use framing::video::VideoFrame;
+use framing::Image;
 use std::iter;
 use std::sync::Arc;
 use vulkano::device::Queue;
@@ -12,12 +12,12 @@ pub fn upload<W, T, F>(
     queue: Arc<Queue>,
     format: F,
     image: T,
-) -> Result<
-    (Arc<ImmutableImage<F>>, CommandBufferExecFuture<NowFuture, AutoCommandBuffer>),
-    ImageCreationError,
->
+) -> Result<(
+        Arc<ImmutableImage<F>>,
+        CommandBufferExecFuture<NowFuture, AutoCommandBuffer>
+    ), ImageCreationError>
 where
-    T: VideoFrame,
+    T: Image,
     F: FormatDesc + AcceptsPixels<W> + Send + Sync + 'static,
     W: From<T::Pixel> + Clone + Send + Sync + 'static,
 {

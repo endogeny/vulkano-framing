@@ -9,7 +9,7 @@ use vulkano::buffer::cpu_access::{
     ReadLockError,
     WriteLockError
 };
-use framing::video::VideoFrame;
+use framing::Image;
 
 /// Wraps a buffer, providing functions that allow the user to interpret it as
 /// a frame instead of as a bunch of pixels.
@@ -85,7 +85,7 @@ pub struct Reader<'a, T: 'a> {
     height: usize
 }
 
-impl<'a, T: 'a> VideoFrame for Reader<'a, T> where T: Clone {
+impl<'a, T: 'a> Image for Reader<'a, T> where T: Clone {
     type Pixel = T;
 
     fn width(&self) -> usize { self.width }
@@ -111,7 +111,7 @@ pub struct Writer<'a, T: 'a> {
     height: usize
 }
 
-impl<'a, T: 'a> VideoFrame for Writer<'a, T> where T: Clone {
+impl<'a, T: 'a> Image for Writer<'a, T> where T: Clone {
     type Pixel = T;
 
     fn width(&self) -> usize { self.width }
