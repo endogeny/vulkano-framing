@@ -6,7 +6,11 @@ extern crate vulkano_framing;
 extern crate png_framing;
 
 use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer};
-use vulkano::command_buffer::{AutoCommandBufferBuilder, CommandBuffer, DynamicState};
+use vulkano::command_buffer::{
+    AutoCommandBufferBuilder,
+    CommandBuffer,
+    DynamicState
+};
 use vulkano::device::{Device, DeviceExtensions};
 use vulkano::format::Format;
 use vulkano::framebuffer::{Framebuffer, Subpass};

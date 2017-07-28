@@ -3,7 +3,12 @@ use std::fmt;
 use std::ops::{Deref, DerefMut};
 use std::sync::Arc;
 use vulkano::buffer::{BufferAccess, CpuAccessibleBuffer};
-use vulkano::buffer::cpu_access::{ReadLock, WriteLock, ReadLockError, WriteLockError};
+use vulkano::buffer::cpu_access::{
+    ReadLock,
+    WriteLock,
+    ReadLockError,
+    WriteLockError
+};
 use framing::video::VideoFrame;
 
 /// Wraps a buffer, providing functions that allow the user to interpret it as
