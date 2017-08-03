@@ -1,6 +1,5 @@
 use std::error::Error as StdError;
 use std::fmt;
-use std::ops::{Deref, DerefMut};
 use std::sync::Arc;
 use vulkano::buffer::{BufferAccess, CpuAccessibleBuffer};
 use vulkano::buffer::cpu_access::{
@@ -96,10 +95,8 @@ impl<'a, T: 'a> Image for Reader<'a, T> where T: Clone {
     }
 }
 
-impl<'a, T: 'a> Deref for Reader<'a, T> {
-    type Target = [T];
-
-    fn deref(&self) -> &Self::Target {
+impl<'a, T: 'a> AsRef<[T]> for Reader<'a, T> {
+    fn as_ref(&self) -> &[T] {
         &self.inner
     }
 }
@@ -122,16 +119,14 @@ impl<'a, T: 'a> Image for Writer<'a, T> where T: Clone {
     }
 }
 
-impl<'a, T: 'a> Deref for Writer<'a, T> {
-    type Target = [T];
-
-    fn deref(&self) -> &Self::Target {
+impl<'a, T: 'a> AsRef<[T]> for Writer<'a, T> {
+    fn as_ref(&self) -> &[T] {
         &self.inner
     }
 }
 
-impl<'a, T: 'a> DerefMut for Writer<'a, T> {
-    fn deref_mut(&mut self) -> &mut Self::Target {
+impl<'a, T: 'a> AsMut<[T]> for Writer<'a, T> {
+    fn as_mut(&mut self) -> &mut [T] {
         &mut self.inner
     }
 }

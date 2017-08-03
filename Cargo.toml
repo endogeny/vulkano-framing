@@ -2,7 +2,7 @@
 name = "vulkano-framing"
 description = "Uploading images to and downloading frames from the GPU."
 license = "MIT"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Ram <quadrupleslap@gmail.com>"]
 repository = "https://github.com/endogeny/vulkano-framing"
 documentation = "https://docs.rs/vulkano-framing"
