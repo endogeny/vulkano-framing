@@ -3,15 +3,15 @@ name = "vulkano-framing"
 description = "Uploading images to and downloading frames from the GPU."
 keywords = ["vulkan", "texture", "upload", "frame", "buffer"]
 license = "MIT"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["Ram <quadrupleslap@gmail.com>"]
 repository = "https://github.com/endogeny/vulkano-framing"
 documentation = "https://docs.rs/vulkano-framing"
 
 [dependencies]
-framing = "0.3"
-vulkano = "0.5"
+framing = "0.6"
+vulkano = "0.6"
 
 [dev-dependencies]
-png-framing = "0.3"
-vulkano-shader-derive = "0.5"
+png-framing = "0.5"
+vulkano-shader-derive = "0.6"

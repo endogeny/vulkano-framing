@@ -4,6 +4,7 @@
 #[macro_use] extern crate vulkano_shader_derive;
 extern crate vulkano_framing;
 extern crate png_framing;
+extern crate framing;
 
 use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer};
 use vulkano::command_buffer::{
@@ -22,7 +23,8 @@ use vulkano::sampler::{Filter, MipmapMode, SamplerAddressMode, Sampler};
 use vulkano::sync::GpuFuture;
 use vulkano::descriptor::descriptor_set::PersistentDescriptorSet;
 
-use png_framing::Png;
+use png_framing as png;
+use framing::Chunky;
 use vulkano_framing::Buffer;
 use std::sync::Arc;
 
@@ -34,7 +36,7 @@ struct Vertex {
 impl_vertex!(Vertex, pos, tex);
 
 fn main() {
-    let image = Png::decode(include_bytes!("todoroki.png")).unwrap();
+    let image = png::decode(include_bytes!("todoroki.png")).unwrap();
 
     let format = Format::R8G8B8A8Unorm;
     let (w, h) = (1920, 1200);
@@ -77,7 +79,6 @@ fn main() {
             device.clone(),
             w * h,
             BufferUsage::all(),
-            Some(queue_family)
         ).unwrap()
     };
 
@@ -92,7 +93,6 @@ fn main() {
     let vertices = CpuAccessibleBuffer::from_iter(
         device.clone(),
         BufferUsage::all(),
-        Some(queue.family()),
         vertices![
             [-0.8,  0.8, 0.0], [0.0, 1.0],
             [ 0.8,  0.8, 0.0], [1.0, 1.0],
@@ -206,7 +206,11 @@ fn main() {
         .wait(None)
         .unwrap();
 
-    Png::new(output.read().unwrap()).save("output.png").unwrap();
+    png::save(
+        &Chunky::new(framing::map(Into::into, output.read().unwrap())),
+        "output.png"
+    ).unwrap();
+
     println!("Saved image to `output.png`!");
 }
 
